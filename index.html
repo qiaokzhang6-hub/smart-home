@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>iOS系统 · 智能住宅底盘</title>
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #c9a96e;
+    --accent-light: #e8d5b0;
+    --bg: #0f0f1a;
+    --card-bg: #1a1a2e;
+    --card-bg2: #222240;
+    --text: #f0ece4;
+    --text-dim: #a09e96;
+    --text-bright: #ffffff;
+    --border: rgba(201,169,110,0.2);
+    --gradient1: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --gradient2: linear-gradient(135deg, #c9a96e 0%, #a67c52 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Hero Section */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(201,169,110,0.08) 0%, transparent 60%),
+                var(--bg);
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .hero-title {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 6px;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .hero-price {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .hero-price span {
+    font-size: 28px;
+    font-weight: 400;
+  }
+
+  .hero-price-label {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .hero-tag {
+    padding: 8px 18px;
+    background: rgba(201,169,110,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--accent-light);
+  }
+
+  .hero-one-line {
+    max-width: 560px;
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.8;
+    padding: 20px 28px;
+    background: rgba(201,169,110,0.05);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    text-align: left;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    animation: bounce 2s infinite;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* Section */
+  .section {
+    padding: 48px 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .section-num {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 20px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-highlight {
+    background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(201,169,110,0.04) 100%);
+    border-color: rgba(201,169,110,0.3);
+  }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    font-size: 20px;
+  }
+
+  /* Spec Table */
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .spec-row:last-child { border-bottom: none; }
+
+  .spec-label {
+    font-size: 14px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    max-width: 50%;
+  }
+
+  .spec-value {
+    font-size: 14px;
+    color: var(--text);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .spec-value.accent {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  /* Grid */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .grid-item {
+    background: var(--card-bg2);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .grid-item .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .grid-item .label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Block list */
+  .block-list {
+    list-style: none;
+  }
+
+  .block-list li {
+    padding: 12px 16px;
+    background: var(--card-bg2);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .block-list li .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  /* ===== 品牌背书板块专项修复 ===== */
+  .brand-section {
+    padding-bottom: 24px;
+  }
+  .brand-section .card {
+    padding: 20px;
+    margin-bottom: 0;
+  }
+  .brand-section .block-list li {
+    padding: 14px 16px;
+    line-height: 1.9;
+    margin-bottom: 6px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  .brand-section .block-list li:last-child {
+    margin-bottom: 0;
+  }
+  .brand-section .card-title {
+    margin-bottom: 14px;
+  }
+
+  /* 移动端：品牌背书双列转单列 */
+  @media (max-width: 520px) {
+    .grid2 {
+      grid-template-columns: 1fr;
+    }
+    .brand-section .card {
+      padding: 20px;
+    }
+    .brand-section .block-list li {
+      padding: 16px 16px;
+    }
+  }
+
+  /* Brand pills */
+  .brand-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .brand-pill {
+    padding: 6px 14px;
+    background: rgba(201,169,110,0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--accent-light);
+  }
+
+  /* Scenario cards */
+  .scenario {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .scenario-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .scenario-a {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* Eco badge */
+  .eco-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(76,175,80,0.1);
+    border: 1px solid rgba(76,175,80,0.3);
+    border-radius: 100px;
+    font-size: 12px;
+    color: #81c784;
+    margin: 4px 4px 4px 0;
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: rgba(201,169,110,0.06);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* Elevator pitch */
+  .elevator {
+    background: linear-gradient(135deg, rgba(201,169,110,0.15) 0%, rgba(201,169,110,0.05) 100%);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .elevator p {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--text-bright);
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 48px 20px 60px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  .footer-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  /* Tab nav */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex: 1;
+    min-width: fit-content;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  .tab-btn.active {
+    background: var(--gradient2);
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Construction items */
+  .construction-group {
+    margin-bottom: 20px;
+  }
+
+  .construction-group-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+
+  .construction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--card-bg2);
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+  .construction-item .name { color: var(--text); }
+  .construction-item .detail { color: var(--text-dim); font-size: 12px; }
+
+  /* Client version section */
+  .client-section {
+    background: linear-gradient(180deg, rgba(201,169,110,0.06) 0%, transparent 100%);
+    padding: 48px 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .client-block {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 24px;
+  }
+
+  .client-block .intro-line {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .client-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+
+  .client-item .emoji {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .client-item .title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .client-item .desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* Animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Sticky header */
+  .sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(15,15,26,0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+  }
+
+  .sticky-header.show { transform: translateY(0); }
+
+  .sticky-header .brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .sticky-header .price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- Sticky Header -->
+<div class="sticky-header" id="stickyHeader">
+  <div class="brand">智能住宅底盘</div>
+  <div class="price">¥29.8万</div>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-badge">天津博洛尼 × 不厌空间 联合出品</div>
+  <div class="hero-title">智能住宅底盘</div>
+  <div class="hero-sub">iOS 系统 · 一站式智能整装</div>
+  <div class="hero-price"><span>¥</span>29.8<span>万</span></div>
+  <div class="hero-price-label">90-120㎡ 套内三居室 · 全包一口价</div>
+  <div style="margin-top:16px; padding:14px 20px; background:linear-gradient(135deg, rgba(255,152,0,0.12) 0%, rgba(255,152,0,0.04) 100%); border:1px solid rgba(255,152,0,0.25); border-radius:12px; text-align:center; max-width:520px;">
+    <div style="font-size:15px; font-weight:700; color:#ff9800; letter-spacing:1px;">🎁 签约即赠 价值5万软装超级大礼包</div>
+    <div style="font-size:12px; color:var(--text-dim); margin-top:6px; line-height:1.7;">悦享客厅（沙发+茶几+窗帘）｜ 悦享餐厅（餐桌+4椅+窗帘）｜ 悦享卧室（床+床垫+窗帘）</div>
+    <div style="font-size:12px; color:var(--text-dim); margin-top:2px;">9件家具 · 多款可选随意搭配 · 限时全免</div>
+  </div>
+  <div class="hero-tags" style="margin-top:24px;">
+    <div class="hero-tag">博洛尼全屋定制 · 33年品牌</div>
+    <div class="hero-tag" style="background:rgba(201,169,110,0.15); color:#e8d5b0; border-color:rgba(201,169,110,0.4);">不厌空间 · 国际获奖设计团队</div>
+    <div class="hero-tag">卡萨帝厨电</div>
+    <div class="hero-tag">全屋智能</div>
+  </div>
+  <div class="hero-one-line">
+    <div style="font-size:20px;color:var(--accent);margin-bottom:10px;letter-spacing:1px;font-weight:600;">谁说整装就是千篇一律？</div>
+    <div style="font-size:15px;color:var(--text);line-height:1.8;">不厌空间设计师为你量身定制，博洛尼柜体一对一出方案。29.8万，装出一个"只属于你"的家。</div>
+  </div>
+  <div class="scroll-hint">↓ 向下滑动了解更多</div>
+</section>
+
+<!-- ==================== 套餐概况 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-num">01</div>
+  <div class="section-title">套餐概况</div>
+  <div class="section-desc">六个核心数字，快速了解套餐</div>
+
+  <div class="grid2" style="margin-bottom:24px;">
+    <div class="grid-item">
+      <div class="num">29.8<span style="font-size:14px;font-weight:400">万</span></div>
+      <div class="label">套餐总价</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">98<span style="font-size:14px;font-weight:400">工作日</span></div>
+      <div class="label">签约后交付</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">40<span style="font-size:14px;font-weight:400">项</span></div>
+      <div class="label">标配施工</div>
+    </div>
+    <div class="grid-item">
+      <div class="num">6<span style="font-size:14px;font-weight:400">大板块</span></div>
+      <div class="label">一站式全包</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="spec-row">
+      <span class="spec-label">套餐名称</span>
+      <span class="spec-value">iOS 系统 · 智能住宅底盘</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">出品方</span>
+      <span class="spec-value">博洛尼 × 不厌空间</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">适用户型</span>
+      <span class="spec-value">三居室（套内90-120㎡）</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">计价方式</span>
+      <span class="spec-value accent">套内实测面积，不含公摊</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">交付周期</span>
+      <span class="spec-value">签约后98个工作日</span>
+    </div>
+    <div class="spec-row">
+      <span class="spec-label">增项说明</span>
+      <span class="spec-value accent">合同写明无主动增项</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 公司背书 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in brand-section">
+  <div class="section-num">02</div>
+  <div class="section-title">双品牌背书</div>
+  <div class="section-desc">强强联合，品质保障</div>
+
+  <div class="grid2">
+    <div class="card card-highlight">
+      <div class="card-title"><span class="icon">🏛️</span> 博洛尼</div>
+      <ul class="block-list" style="margin:0;">
+        <li><span class="dot"></span>成立于1992年，33年高端定制品牌</li>
+        <li><span class="dot"></span>意大利设计，钛马赫德系精工</li>
+        <li><span class="dot"></span>ENF级板材（≤0.025mg/m³）<br>JIS F☆☆☆☆（≤0.3mg/L）<br>+ 激光封边</li>
+        <li><span class="dot"></span>博洛尼定制板材可签环保承诺书，甲醛优于国标，不达标免单</li>
+      </ul>
+    </div>
+    <div class="card card-highlight">
+      <div class="card-title"><span class="icon">✦</span> 不厌空间</div>
+      <ul class="block-list" style="margin:0;">
+        <li><span class="dot"></span>专注大平层/别墅/智能住宅全案</li>
+        <li><span class="dot"></span>日本IDPA国际先锋设计大奖 · 金创意奖别墅豪宅专业奖</li>
+        <li><span class="dot"></span>主材设计师帮您挑，效果不将就，价格不浪费</li>
+        <li><span class="dot"></span>人均10年设计沉淀 · 全案落地不走样</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 六大板块 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-num">03</div>
+  <div class="section-title">六大板块详解</div>
+  <div class="section-desc">全案设计 · 施工 · 主材 · 定制 · 厨电 · 智能</div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('design')">设计</button>
+    <button class="tab-btn" onclick="switchTab('construct')">施工</button>
+    <button class="tab-btn" onclick="switchTab('material')">主材</button>
+    <button class="tab-btn" onclick="switchTab('custom')">定制</button>
+    <button class="tab-btn" onclick="switchTab('kitchen')">厨电</button>
+    <button class="tab-btn" onclick="switchTab('smart')">智能</button>
+  </div>
+
+  <!-- 设计 -->
+  <div class="tab-content active" id="tab-design">
+    <div class="card card-highlight">
+      <div class="card-title"><span class="icon">🎨</span> 不厌空间全案设计</div>
+      <ul class="block-list">
+        <li><span class="dot"></span><strong>① 需求沟通</strong>　生活方式 / 功能需求 / 风格偏好 / 预算范围</li>
+        <li><span class="dot"></span><strong>② 上门量房</strong>　实测数据 + 结构勘测 + 现场拍照</li>
+        <li><span class="dot"></span><strong>③ 概念方案</strong>　平面布局 + 风格意向 + 初步预算</li>
+        <li><span class="dot"></span><strong>④ 方案深化</strong>　立面设计 + 材质搭配 + 色彩方案</li>
+        <li><span class="dot"></span><strong>⑤ 效果图呈现</strong>　3D效果图，所见即所得</li>
+        <li><span class="dot"></span><strong>⑥ 施工图出图</strong>　全套CAD + 节点大样 + 物料清单</li>
+        <li><span class="dot"></span><strong>⑦ 施工配合</strong>　图纸交底 + 节点验收 + 现场跟进</li>
+        <li><span class="dot"></span><strong>⑧ 软装落地</strong>　家具/窗帘/饰品搭配，协助采购</li>
+        <li><span class="dot"></span><strong>⑨ 交付拍摄</strong>　竣工验收 + 空间拍摄归档</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(201,169,110,0.06);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;">
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.8;">智能系统布局贯穿③⑥全程：网关位置、开关点位、灯光场景与硬装一体化设计，不是后期加装</div>
+      </div>
+      <!-- 岗位协同横排卡片 -->
+      <div style="margin-top:14px;display:flex;gap:10px;">
+        <div style="flex:1;padding:12px 10px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:10px;text-align:center;">
+          <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px;">全案顾问</div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">客户对接<br>进度统筹</div>
+        </div>
+        <div style="flex:1;padding:12px 10px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:10px;text-align:center;">
+          <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px;">主案设计师</div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">方案 · 施工图<br>效果图</div>
+        </div>
+        <div style="flex:1;padding:12px 10px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:10px;text-align:center;">
+          <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px;">产品设计师</div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">定制 · 主材<br>智能</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;text-align:center;font-size:11px;color:var(--text-dim);">多岗位协同 · 各司其职</div>
+      <ul class="block-list" style="margin-top:10px;">
+        <li><span class="dot"></span>🎁 <strong>限时赠送 · 软装超级大礼包</strong>：签约即赠价值5万，详见下方「限时礼赠」板块</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 施工 -->
+  <div class="tab-content" id="tab-construct">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏗️</span> 施工40项标配（钛马赫精工体系）</div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">客餐厅 · 8项</div>
+        <div class="construction-item"><span class="name">墙皮铲除</span><span class="detail">全屋墙顶</span></div>
+        <div class="construction-item"><span class="name">无主灯造型平顶</span><span class="detail">轻钢龙骨+9.5mm石膏板</span></div>
+        <div class="construction-item"><span class="name">石膏板装饰线+叠级</span><span class="detail">双层9.5mm石膏板</span></div>
+        <div class="construction-item"><span class="name">反光灯槽</span><span class="detail">高≤200mm 宽≤300mm</span></div>
+        <div class="construction-item"><span class="name">窗帘盒</span><span class="detail">欧松板+石膏板</span></div>
+        <div class="construction-item"><span class="name">地砖铺贴</span><span class="detail">800×800mm 清工辅料</span></div>
+        <div class="construction-item"><span class="name">乳胶漆墙面处理</span><span class="detail">墙锢→墙衬→乳胶漆</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">卧室空间 · 7项</div>
+        <div class="construction-item"><span class="name">墙皮铲除</span><span class="detail">全屋墙顶</span></div>
+        <div class="construction-item"><span class="name">衣柜上方平顶</span><span class="detail">轻钢龙骨+石膏板</span></div>
+        <div class="construction-item"><span class="name">石膏板装饰线+叠级</span><span class="detail">含双眼皮石膏线</span></div>
+        <div class="construction-item"><span class="name">窗帘盒</span><span class="detail">欧松板+石膏板</span></div>
+        <div class="construction-item"><span class="name">地面找平</span><span class="detail">木地板基础找平</span></div>
+        <div class="construction-item"><span class="name">乳胶漆墙面处理</span><span class="detail">工艺同客餐厅</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">卫生间 · 8项</div>
+        <div class="construction-item"><span class="name">红砖包管道</span><span class="detail">静音降噪处理</span></div>
+        <div class="construction-item"><span class="name">墙面抹灰找方</span><span class="detail">水泥砂浆包贴基础 + 墙固 + 瓷砖粘接剂</span></div>
+        <div class="construction-item"><span class="name">地面放坡</span><span class="detail">防积水</span></div>
+        <div class="construction-item"><span class="name">防水</span><span class="detail">刚性墙面两遍+柔性地面两遍+48h闭水试验，质保5年</span></div>
+        <div class="construction-item"><span class="name">墙砖铺贴</span><span class="detail">400×800mm</span></div>
+        <div class="construction-item"><span class="name">地砖铺贴</span><span class="detail">400×400mm</span></div>
+        <div class="construction-item"><span class="name">瓷砖裹门口</span><span class="detail">2个</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">厨房 · 5项</div>
+        <div class="construction-item"><span class="name">红砖包管道</span><span class="detail">静音降噪（含横管隔音）</span></div>
+        <div class="construction-item"><span class="name">墙砖铺贴</span><span class="detail">400×800mm</span></div>
+        <div class="construction-item"><span class="name">地砖铺贴</span><span class="detail">800×800mm</span></div>
+        <div class="construction-item"><span class="name">瓷砖裹门口</span><span class="detail">1个</span></div>
+        <div class="construction-item"><span class="name">墙面抹灰找方</span><span class="detail">墙固+瓷砖粘接剂</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">水电+配套 · 10项</div>
+        <div class="construction-item"><span class="name">成品保护</span><span class="detail">地膜/窗户/分水器/燃气保护</span></div>
+        <div class="construction-item"><span class="name">水路改造</span><span class="detail">20PPR/25PPR，小循环120米</span></div>
+        <div class="construction-item"><span class="name">电路改造</span><span class="detail">75个点位，470米电线</span></div>
+        <div class="construction-item"><span class="name">拆除</span><span class="detail">室内防火门/窗户护栏</span></div>
+        <div class="construction-item"><span class="name">垃圾搬运</span><span class="detail">运到物业指定地点</span></div>
+        <div class="construction-item"><span class="name">开关插座面板</span><span class="detail">全屋安装（不含智能面板/网络AP面板）</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主材 -->
+  <div class="tab-content" id="tab-material">
+    <div class="card">
+      <div class="card-title"><span class="icon">🧱</span> 不厌空间设计款严选主材</div>
+
+      <div class="spec-row">
+        <span class="spec-label">地板</span>
+        <span class="spec-value">不厌空间设计款严选</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">地砖（客厅）</span>
+        <span class="spec-value">马可波罗/良里等 800×800</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">墙地砖（厨卫）</span>
+        <span class="spec-value">马可波罗/良里等 400×800</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">洁具套装</span>
+        <span class="spec-value">恒洁/箭牌等</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">铝扣板吊顶</span>
+        <span class="spec-value">奥普/名族</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">金属踢脚线</span>
+        <span class="spec-value">全屋</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">钛镁合金门</span>
+        <span class="spec-value">800×2100mm 厨卫3套</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">地漏</span>
+        <span class="spec-value">潜水艇 方形4个</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">窗台石</span>
+        <span class="spec-value">单色石英石 宽＜300mm</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">美缝</span>
+        <span class="spec-value">东方雨虹 真瓷美缝</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">止逆阀</span>
+        <span class="spec-value">潜水艇 厨房1个</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 定制 -->
+  <div class="tab-content" id="tab-custom">
+    <div class="card card-highlight">
+      <div class="card-title"><span class="icon">🪵</span> 博洛尼全屋定制（Y系列）</div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">橱柜</div>
+        <div class="construction-item"><span class="name">3米吊柜 + 4米地柜</span><span class="detail">+ 4米岩板台面</span></div>
+        <div class="construction-item"><span class="name">水盆龙头</span><span class="detail">含两个抽屉</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">定制衣柜</div>
+        <div class="construction-item"><span class="name">全屋20投影㎡</span><span class="detail">+ 6个抽屉 + 12m挂衣杆</span></div>
+      </div>
+
+      <div class="construction-group">
+        <div class="construction-group-title">木门</div>
+        <div class="construction-item"><span class="name">800×2150mm</span><span class="detail">含门扇/门套/静音锁/三维合页/门吸</span></div>
+        <div class="construction-item"><span class="name">三居室最多3扇</span><span class="detail">Y系列</span></div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div class="eco-badge">🇯🇵 JIS F☆☆☆☆板材</div>
+        <div class="eco-badge">🌿 ENF级板材</div>
+        <div class="eco-badge">🔬 激光封边无胶水</div>
+        <div class="eco-badge">🛡️ 9道检测 · 孔槽全封堵</div>
+        <div class="eco-badge">💧 水性漆</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 厨电 -->
+  <div class="tab-content" id="tab-kitchen">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔥</span> 卡萨帝厨电</div>
+      <div class="spec-row">
+        <span class="spec-label">油烟机</span>
+        <span class="spec-value">卡萨帝 CXW-358-QZAUD</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">燃气灶</span>
+        <span class="spec-value">卡萨帝 JZT-C2G78EGU9</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">品牌定位</span>
+        <span class="spec-value">海尔高端奢侈品牌</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">售后</span>
+        <span class="spec-value">卡萨帝官方保修</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 智能 -->
+  <div class="tab-content" id="tab-smart">
+    <div class="card card-highlight">
+      <div class="card-title"><span class="icon">📱</span> 全屋智能（iOS 系统生态）</div>
+
+      <div class="spec-row">
+        <span class="spec-label">电动窗帘</span>
+        <span class="spec-value">静音电机×3 + 10m轨道</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">智慧中枢</span>
+        <span class="spec-value">客厅1台</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">智能开关</span>
+        <span class="spec-value">全屋4个</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">液晶面板</span>
+        <span class="spec-value">集悦妙控屏 初雪白</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">安防传感</span>
+        <span class="spec-value">水浸+烟雾+燃气+人感雷达×2</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">灯光系统</span>
+        <span class="spec-value">射灯×20 + 灯带20m + 驱动/变压器</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">安装+二次调光</span>
+        <span class="spec-value">含安装，二次调光免费</span>
+      </div>
+
+      <div style="margin-top:20px; padding:16px; background:rgba(201,169,110,0.06); border-radius:12px;">
+        <div style="font-size:14px; color:var(--accent); font-weight:600; margin-bottom:8px;">🎬 场景演示</div>
+        <div style="font-size:14px; color:var(--text); line-height:1.8;">
+          "嘿Siri，我回家了"<br>
+          → 灯光亮起 + 窗帘打开<br><br>
+          以后新增 iOS 生态设备直接接入<br>不用重新布线
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 辅料 & 环保 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-num">04</div>
+  <div class="section-title">辅料品牌 & 变态环保5.0</div>
+  <div class="section-desc">全品牌正品 · 可签环保承诺书 · 清华认证</div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title"><span class="icon">🔧</span> 辅料品牌</div>
+    <div class="brand-pills">
+      <div class="brand-pill">德国爱格板</div>
+      <div class="brand-pill">凯立森OSB</div>
+      <div class="brand-pill">可耐福耐水石膏板</div>
+      <div class="brand-pill">都芳墙漆</div>
+      <div class="brand-pill">东方雨虹防水</div>
+      <div class="brand-pill">德国亚地斯防水</div>
+      <div class="brand-pill">霍尼韦尔水管</div>
+      <div class="brand-pill">金貂电线</div>
+      <div class="brand-pill">飞利浦网线</div>
+      <div class="brand-pill">壁贝粘接剂</div>
+      <div class="brand-pill">伟星PVC线管</div>
+    </div>
+  </div>
+
+  <div class="card card-highlight">
+    <div class="card-title"><span class="icon">🌿</span> 环保保障</div>
+    <div class="eco-badge">🇯🇵 JIS F☆☆☆☆板材</div>
+    <div class="eco-badge">ENF级板材（≤0.025mg/m³）</div>
+    <div class="eco-badge">🔬 9道检测 · 孔槽全封堵</div>
+    <div class="eco-badge">激光封边 无胶水</div>
+    <div class="eco-badge">水性漆 无苯/甲苯</div>
+    <div class="eco-badge">德国爱格板</div>
+    <div class="eco-badge">都芳墙漆 低VOC</div>
+    <div class="eco-badge">🏛️ 清华大学建筑环境检测中心认证</div>
+  </div>
+
+  <div style="margin-top:16px;padding:14px;background:rgba(76,175,80,0.06);border:1px dashed rgba(76,175,80,0.3);border-radius:12px;">
+    <div style="font-size:14px;font-weight:600;color:#81c784;margin-bottom:6px;">📝 博洛尼定制板材可签环保承诺书</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.8;">ENF级 + JIS F☆☆☆☆ 双认证 · 不达标免单</div>
+  </div>
+  <div class="card card-highlight" style="margin-top:16px;">
+    <div class="card-title" style="font-size:15px;">📜 博洛尼环保承诺书（可签）</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px;">Y系列 ENF 级承诺书</div>
+        <ul style="font-size:12px;color:var(--text-dim);line-height:2;list-style:none;padding:0;">
+          <li>国标 ENF 级（甲醛 ≤0.025mg/m³）</li>
+          <li>博洛尼内控 ≤0.020mg/m³</li>
+          <li>检测机构：国家人造板与木竹制品质量监督检验中心</li>
+          <li>不达标予以免单</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px;">JIS F☆☆☆☆ 承诺书</div>
+        <ul style="font-size:12px;color:var(--text-dim);line-height:2;list-style:none;padding:0;">
+          <li>日本 JIS F☆☆☆☆ 级（甲醛 ≤0.3mg/L）</li>
+          <li>博洛尼内控 ≤0.25mg/L</li>
+          <li>额外覆盖 VOC + 4 项重金属全项检测</li>
+          <li>不达标予以免单</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--text-dim);text-align:center;">环保承诺仅针对博洛尼定制柜体板材（箱体板/墙板），以签约承诺书为准</div>
+  </div>
+</section>
+
+<!-- ==================== 核心销售说辞 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-num">05</div>
+  <div class="section-title">心里的疑问，我们提前答了</div>
+  <div class="section-desc">装修前最想搞清楚的事，一句一句回</div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 你们到底是做什么的？</div>
+    <div class="scenario-a">我们是博洛尼和不厌空间联合推出的智能整装套餐，29.8万，三居室全包。博洛尼定制、卡萨帝厨电、全屋智能、施工设计，一站式搞定，拎包入住。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 29.8万到底含了什么？</div>
+    <div class="scenario-a">含六大板块：第一，不厌空间全案设计，设计师全程跟；第二，施工40项，防水质保5年；第三，主材全是设计师严选的一线品牌；第四，博洛尼Y系列全屋定制，橱柜衣柜木门全含；第五，卡萨帝烟机灶具；第六，全屋智能，电动窗帘、智能灯光、安防，用手机就能控制。<br><br>而且我们是按<strong>套内面积</strong>计价，不含公摊，等于比别家按建筑面积算便宜了一截。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 跟传统装修比到底好在哪？</div>
+    <div class="scenario-a">传统装修你得分别找设计公司、施工队、定制店、智能公司，每个都要对接、都要加钱，最后超预算是常态。我们是一口价29.8万，合同写明无主动增项，一个团队从头跟到尾。<br><br>而且我们的定制是博洛尼，不是小品牌；智能是全屋智能系统，不是装个智能音箱就完了；辅料用的是德国爱格板、可耐福、都芳、霍尼韦尔，这些你单独去买，光辅料就不止这个价。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 水电保修怎么算？</div>
+    <div class="scenario-a">电路——全改终身质保，断点改造仅保更改部分。老线路不在范围内，这一点我们写清楚，不画大饼。<br><br>水管——保50年，前提是工艺达标：主管道换到管道井、配件全用同品牌。新旧管接头厂家不承保，我们不会含糊地承诺"全包"。<br><br>简单说：做到的标准保，做不到的坦诚说。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 家里有小孩，环保能放心吗？</div>
+    <div class="scenario-a">这是我们最重视的部分。博洛尼板材 ENF级 + JIS F☆☆☆☆ 双认证，比国标E1还高一档；封边用的是激光封边，不用胶水，直接杜绝甲醛释放源；9道检测 + 孔槽全封堵，从工艺上堵死甲醛释放路径；施工用的德国爱格板、都芳墙漆、东方雨虹防水，全是进口或一线环保品牌，清华大学建筑环境检测中心认证。<br><br>而且博洛尼定制板材可以<strong>签订环保承诺书</strong>，ENF级 + JIS F☆☆☆☆ 双认证，甲醛优于国标，不达标免单，白纸黑字写进合同。您有小孩，这点特别重要。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 如果我只装一部分呢？</div>
+    <div class="scenario-a">套餐是整套设计的，分开做会破坏整体性。如果预算有限，可以先做基础和定制，智能部分后面再加。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 定制风格不喜欢怎么办？</div>
+    <div class="scenario-a">标配是Y系列，想升级也没问题。设计方案定稿后，您挑好喜欢的款式，补个差价就行。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 智能设备坏了没人管怎么办？</div>
+    <div class="scenario-a">所有设备有官方保修，我们负责对接售后。以后新买的 iOS 生态设备也能直接接入，不用重新布线。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 施工质量靠不靠谱？</div>
+    <div class="scenario-a">按博洛尼钛马赫精工体系执行，40项标配施工，每个关键节点都要您签字确认才能进入下一道工序。防水质保5年。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 装完多久才能住进去？</div>
+    <div class="scenario-a">签约后98个工作日交付。ENF级板材+德国爱格板+都芳墙漆，环保达标，完工7天后检测甲醛合格就能入住。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 29.8万真的不能再少了？</div>
+    <div class="scenario-a">这个价格已经是套餐价，含了博洛尼定制（市场价11.4万）。确定要签的话可以申请送一个智能门锁，再优惠就没有了。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 你们跟别家比到底好在哪？</div>
+    <div class="scenario-a">两个核心优势：第一，博洛尼定制是标配，别的公司要单独买；第二，全屋智能含在套餐内，别的公司要后期自己找人装。一站式搞定。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 面积怎么算的？会不会被坑？</div>
+    <div class="scenario-a">按套内实测面积计价，不含公摊。120㎡套内就是29.8万，90㎡套内也是29.8万。</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-q">💭 户型想改动怎么办？</div>
+    <div class="scenario-a">墙体拆改不在套餐范围内，需要您自行联系当地专业拆除公司。我们只负责套餐内的施工项目。</div>
+  </div>
+</section>
+
+<!-- ==================== 客户版核心介绍 ==================== -->
+<div class="divider"></div>
+<section class="client-section fade-in">
+  <div class="client-block">
+    <div class="intro-line">iOS 系统 · 智能住宅底盘<br>天津博洛尼 × 不厌空间 联合出品</div>
+
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="font-size:32px; font-weight:800; color:var(--accent);">¥29.8万</div>
+      <div style="font-size:14px; color:var(--text-dim); margin-top:4px;">三居室 / 拎包入住</div>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:28px;">
+      <div class="hero-tag">套内90-120㎡</div>
+      <div class="hero-tag">98个工作日交付</div>
+      <div class="hero-tag">套内实测面积计价</div>
+      <div class="hero-tag">无主动增项</div>
+    </div>
+
+    <div style="height:1px; background:var(--border); margin-bottom:28px;"></div>
+
+    <div style="font-size:14px; font-weight:600; color:var(--accent); margin-bottom:16px; text-align:center;">六大板块，一站式全包</div>
+
+    <div class="client-item">
+      <div class="emoji">🎨</div>
+      <div>
+        <div class="title">不厌空间全案设计</div>
+        <div class="desc">需求沟通 → 量房 → 概念方案 → 深化设计 → 效果图 → 施工图 → 施工配合 → 软装落地 → 交付拍摄<br>全案顾问+主案设计师+产品设计师多岗位协同，智能系统布局贯穿全程</div>
+      </div>
+    </div>
+
+    <div class="client-item">
+      <div class="emoji">🏗️</div>
+      <div>
+        <div class="title">施工40项标配</div>
+        <div class="desc">博洛尼钛马赫精工体系，超国标验收，防水质保5年</div>
+      </div>
+    </div>
+
+    <div class="client-item">
+      <div class="emoji">🧱</div>
+      <div>
+        <div class="title">不厌空间设计款严选主材</div>
+        <div class="desc">地板 · 瓷砖（马可波罗/良里） · 洁具（恒洁/箭牌） · 吊顶（奥普/名族）</div>
+      </div>
+    </div>
+
+    <div class="client-item">
+      <div class="emoji">🪵</div>
+      <div>
+        <div class="title">博洛尼全屋定制 · 33年品牌（Y系列）</div>
+        <div class="desc">橱柜（3米吊柜+4米地柜+岩板台面）+ 定制衣柜（20投影㎡）+ 木门（最多3扇）<br>JIS F☆☆☆☆板材 · 可签环保承诺书 · 不达标免单</div>
+      </div>
+    </div>
+
+    <div class="client-item">
+      <div class="emoji">🔥</div>
+      <div>
+        <div class="title">卡萨帝厨电</div>
+        <div class="desc">油烟机 + 燃气灶，海尔高端品牌</div>
+      </div>
+    </div>
+
+    <div class="client-item">
+      <div class="emoji">📱</div>
+      <div>
+        <div class="title">全屋智能（iOS 系统生态）</div>
+        <div class="desc">电动窗帘 + 智慧中枢 + 智能开关 + 集悦妙控屏 + 安防传感 + 好光系统<br>用iPhone就能控制全屋，"嘿Siri，我回家了"一键联动</div>
+      </div>
+    </div>
+
+    <div style="height:1px; background:var(--border); margin:24px 0;"></div>
+
+    <div style="text-align:center;">
+      <div style="font-size:13px; color:var(--text-dim); margin-bottom:10px;">环保保障</div>
+      <div class="brand-pills" style="justify-content:center;">
+        <div class="eco-badge">🇯🇵 JIS F☆☆☆☆</div>
+        <div class="eco-badge">🌿 ENF级板材</div>
+        <div class="eco-badge">🔬 9道检测 · 孔槽全封堵</div>
+        <div class="eco-badge">🔬 激光封边无胶水</div>
+        <div class="eco-badge">🇩🇪 德国爱格板</div>
+        <div class="eco-badge">💧 都芳墙漆</div>
+        <div class="eco-badge">🛡️ 东方雨虹防水</div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(76,175,80,0.06);border:1px dashed rgba(76,175,80,0.3);border-radius:10px;">
+        <div style="font-size:13px;font-weight:600;color:#81c784;">📝 博洛尼定制板材可签环保承诺书</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">ENF级 + JIS F☆☆☆☆ 双认证 · 不达标免单</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; text-align:center;">
+      <div style="font-size:13px; color:var(--text-dim); margin-bottom:10px;">辅料全品牌正品</div>
+      <div class="brand-pills" style="justify-content:center;">
+        <div class="brand-pill">可耐福</div>
+        <div class="brand-pill">霍尼韦尔</div>
+        <div class="brand-pill">金貂电线</div>
+        <div class="brand-pill">飞利浦网线</div>
+        <div class="brand-pill">壁贝</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; text-align:center; padding:14px; background:rgba(201,169,110,0.08); border-radius:12px;">
+      <div style="font-size:15px; font-weight:600; color:var(--accent);">合同写明无主动增项</div>
+    </div>
+
+    <div style="margin-top:16px; text-align:center; padding:14px; background:rgba(255,152,0,0.08); border:1px dashed rgba(255,152,0,0.4); border-radius:12px;">
+      <div style="font-size:14px; font-weight:600; color:#ff9800;">🎁 限时赠送 · 软装超级大礼包</div>
+      <div style="font-size:12px; color:var(--text-dim); margin-top:4px;">签约即赠价值5万，悦享客厅/餐厅/卧室全套软装，多款可选</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 限时礼赠 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in">
+  <div class="section-num">04</div>
+  <div class="section-title">限时礼赠</div>
+  <div class="section-desc">签约即赠价值5万软装超级大礼包</div>
+
+  <div class="card card-highlight" style="background:linear-gradient(135deg, rgba(255,152,0,0.08) 0%, rgba(255,152,0,0.03) 100%); border:1px solid rgba(255,152,0,0.3);">
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:40px; margin-bottom:4px;">🎁</div>
+      <div style="font-size:22px; font-weight:700; color:#ff9800; letter-spacing:2px;">签约即赠 价值5万软装超级大礼包</div>
+      <div style="font-size:14px; color:var(--text-dim); margin-top:6px;">悦享客厅 · 悦享餐厅 · 悦享卧室 — 三大空间一站配齐</div>
+      <div style="font-size:13px; color:#ff9800; margin-top:4px; font-weight:600;">多款可选随意搭配 · 限时全免</div>
+    </div>
+
+    <div style="display:grid; gap:14px;">
+      <!-- 客厅 -->
+      <div style="display:flex; align-items:center; gap:14px; padding:14px; background:rgba(255,152,0,0.05); border-radius:12px; border:1px solid rgba(255,152,0,0.12);">
+        <div style="font-size:32px; flex-shrink:0;">🛋️</div>
+        <div style="flex:1;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-bright); margin-bottom:4px;">悦享客厅</div>
+          <div style="font-size:13px; color:var(--text-dim); line-height:1.7;">沙发 ×1　茶几 ×1　窗帘 ×1</div>
+        </div>
+        <div style="font-size:13px; color:#ff9800; font-weight:700; white-space:nowrap; flex-shrink:0;">免费赠送</div>
+      </div>
+
+      <!-- 餐厅 -->
+      <div style="display:flex; align-items:center; gap:14px; padding:14px; background:rgba(255,152,0,0.05); border-radius:12px; border:1px solid rgba(255,152,0,0.12);">
+        <div style="font-size:32px; flex-shrink:0;">🍽️</div>
+        <div style="flex:1;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-bright); margin-bottom:4px;">悦享餐厅</div>
+          <div style="font-size:13px; color:var(--text-dim); line-height:1.7;">餐桌 ×1　餐椅 ×4　窗帘 ×1</div>
+        </div>
+        <div style="font-size:13px; color:#ff9800; font-weight:700; white-space:nowrap; flex-shrink:0;">免费赠送</div>
+      </div>
+
+      <!-- 卧室 -->
+      <div style="display:flex; align-items:center; gap:14px; padding:14px; background:rgba(255,152,0,0.05); border-radius:12px; border:1px solid rgba(255,152,0,0.12);">
+        <div style="font-size:32px; flex-shrink:0;">🛏️</div>
+        <div style="flex:1;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-bright); margin-bottom:4px;">悦享卧室</div>
+          <div style="font-size:13px; color:var(--text-dim); line-height:1.7;">床 ×1　床垫 ×1　窗帘 ×1</div>
+        </div>
+        <div style="font-size:13px; color:#ff9800; font-weight:700; white-space:nowrap; flex-shrink:0;">免费赠送</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; text-align:center; padding:10px; background:rgba(255,152,0,0.06); border-radius:8px; font-size:12px; color:var(--text-dim); line-height:1.7;">
+      具体款式/材质/颜色以展厅实物为准 · 活动截止时间详询门店顾问<br>赠送软装不折现，不可更换为其他产品
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 法律备注 ==================== -->
+<div class="divider"></div>
+<section class="section fade-in" style="padding-bottom:24px;">
+  <div style="font-size:13px;color:var(--accent);font-weight:600;margin-bottom:14px;letter-spacing:1px;">⚖️ 备注声明</div>
+  <ul style="font-size:12px;color:var(--text-dim);line-height:2;list-style:none;padding:0;">
+    <li><strong style="color:var(--text);">产品调整</strong>：所列品牌/型号基于当前供应情况，在不降低品质标准的前提下可能替换为同等或更高档次产品，以签约确认清单为准</li>
+    <li><strong style="color:var(--text);">价格说明</strong>：所载套餐价格及活动内容为当前参考价，因天津各店面政策可能存在差异，以到店实际报价及签约合同为准</li>
+    <li><strong style="color:var(--text);">图片提示</strong>：效果图及产品图片仅供风格参考，实际可能存在色差或差异，以施工交付为准</li>
+    <li><strong style="color:var(--text);">合同优先</strong>：套餐内容、施工范围、交付标准均以正式签约合同及附件为唯一依据</li>
+    <li><strong style="color:var(--text);">品牌声明</strong>：所涉品牌及商标归各自权利人所有，本页引用仅作信息说明</li>
+    <li><strong style="color:var(--text);">解释权</strong>：活动最终解释权归天津博洛尼各参与门店所有</li>
+  </ul>
+</section>
+
+<!-- ==================== Footer ==================== -->
+<div class="footer">
+  <div class="footer-logo">BUYANSPACE × <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;letter-spacing:3px;font-weight:400;">Boloni</span></div>
+  <div>智能住宅底盘 · 销售介绍手册 v3.6</div>
+  <div style="margin-top:8px;">天津博洛尼 × 不厌空间 联合出品</div>
+</div>
+
+<script>
+// Tab switching
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tabName).classList.add('active');
+}
+
+// Sticky header
+let lastScroll = 0;
+const stickyHeader = document.getElementById('stickyHeader');
+window.addEventListener('scroll', () => {
+  const currentScroll = window.scrollY;
+  if (currentScroll > 600) {
+    stickyHeader.classList.add('show');
+  } else {
+    stickyHeader.classList.remove('show');
+  }
+  lastScroll = currentScroll;
+});
+
+// Fade in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
